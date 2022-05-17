@@ -13,7 +13,7 @@ router.get('/all', function(req, res, next) {
   res.json(blogPosts);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:blogId', (req, res) => {
   console.log(req.params);
   let id = req.params.id;
   res.json(`${id}`);
