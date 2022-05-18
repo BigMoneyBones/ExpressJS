@@ -6,6 +6,7 @@ const blogPosts = blogs.blogPosts;
 
 /* GET Blogs listing. */
 router.get("/", function (req, res, next) {
+  // Set 'title' key value to "Blogs" ... render applies to blogs.ejs file??
   res.render("blogs", { title: "Blogs" });
 });
 
@@ -26,8 +27,10 @@ module.exports = router;
 /* HELPER FUNCTIONS */
 
 // Find Blog Id
+// Take 'id' from object in 'blogs' array as a parameter.
 let findBlogId = (id) => {
   for (let i = 0; i < blogPosts.length; i++) {
+    // At each iteration of blogs array
     let blog = blogPosts[i];
     if (blog.id === id) {
       return blog;
