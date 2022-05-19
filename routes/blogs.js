@@ -22,16 +22,16 @@ router.get("/singleBlog/:blogId", (req, res, next) => {
   res.json(findBlogId(blogId));
 });
 
-router.get('/postBlog', function (req, res, next){
-  res.render('postBlog');
-})
+router.get("/postBlog", function (req, res, next) {
+  res.render("postBlog");
+});
 
 router.post("/submit", (req, res, next) => {
   res.status(201);
   let newBlog = addBlogPost(req.body);
   blogPosts.push(newBlog);
-  console.log(blogPosts)
-})
+  console.log(blogPosts);
+});
 
 /* HELPER FUNCTIONS */
 
@@ -58,7 +58,8 @@ let sortBlogs = (order) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
   } else {
-    return blogPosts; ``
+    return blogPosts;
+    ``;
   }
 };
 
@@ -70,9 +71,9 @@ let addBlogPost = (body) => {
     title: body.title,
     text: body.text,
     author: body.author,
-    id: id.toString()
-  }
-  return blog
-}
+    id: id.toString(),
+  };
+  return blog;
+};
 
 module.exports = router;

@@ -9,10 +9,11 @@
           title = $("#title").val();
           text = $("#text").val();
           author = $("#author").val();
-          $.post(
-            "http://localhost:4000/blogs/submit",
-            { title: title, text: text, author: author }
-          );
+          $.post("http://localhost:4000/blogs/submit", {
+            title: title,
+            text: text,
+            author: author,
+          });
         });
       });
     </script>
