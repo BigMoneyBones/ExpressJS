@@ -15,14 +15,23 @@ router.get("/all", function (req, res, next) {
   res.json(sortBlogs(sort));
 });
 
-router.get("/get-by-id/:blogId", (req, res) => {
+router.get("/singleBlog/:blogId", (req, res, next) => {
   console.log(req.params);
   const blogId = req.params.blogId;
   //JSON: Javascript Object Notation
   res.json(findBlogId(blogId));
 });
 
-module.exports = router;
+router.get('/postBlog', function (req, res, next){
+  res.render('postBlog');
+})
+
+router.post("/submit", (req, res, next) => {
+  res.status(201);
+  let newBlog = addBlogPost(req.body);
+  blogPosts.push(newBlog);
+  console.log(blogPosts)
+})
 
 /* HELPER FUNCTIONS */
 
@@ -49,6 +58,21 @@ let sortBlogs = (order) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
   } else {
-    return blogPosts;
+    return blogPosts; ``
   }
 };
+
+let addBlogPost = (body) => {
+  let id = blogPosts.length + 1;
+  newDate = new Date();
+  let blog = {
+    createdAt: newDate.toISOString(),
+    title: body.title,
+    text: body.text,
+    author: body.author,
+    id: id.toString()
+  }
+  return blog
+}
+
+module.exports = router;
