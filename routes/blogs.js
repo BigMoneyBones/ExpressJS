@@ -33,6 +33,32 @@ router.post("/submit", (req, res, next) => {
   console.log(blogPosts);
 });
 
+// Display Blogs Router
+router.get("/displayBlogs", (req, res, next) => {
+  res.render("displayBlogs");
+
+  // Attempting Stretch Goal
+
+  // Attempting Stretch Goal
+});
+
+// Display Single Blog Router
+router.get("/displaySingleBlog", (req, res, next) => {
+  res.render("displaySingleBlog");
+})
+
+// Delete Single Blog Router
+router.delete("/deleteblog/:blogId", (req, res, next) => {
+  const blogToDelete = req.params.blogId;
+    for(let i = 0; i < blogPosts.length; i++) {
+      let blog = blogPosts[i];
+      if (blog.id === blogToDelete) {
+        blogPosts.splice(i,1);
+      }
+    }
+    res.json("successfully deleted")
+})
+
 /* HELPER FUNCTIONS */
 
 // Find Blog Id
@@ -59,7 +85,6 @@ let sortBlogs = (order) => {
     });
   } else {
     return blogPosts;
-    ``;
   }
 };
 
