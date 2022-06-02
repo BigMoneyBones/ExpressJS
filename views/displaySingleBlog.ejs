@@ -24,6 +24,7 @@
         var blogId;
         $("#getSingleBlog").click(function () {
           blogId = $("#blogId").val();
+          // title = $("#title").val();
           $.get(
             "http://localhost:4000/blogs/singleBlog/" + blogId,
             function (blog) {
@@ -35,9 +36,10 @@
         });
         $("#deleteSingleBlog").click(function () {
           blogId = $("#blogId").val();
+          // title = $("#title").val();
           console.log("delete blog");
           $.delete(
-            "http://localhost:4000/blogs/deleteBlog/" + blogId,
+            "http://localhost:4000/blogs/deleteBlog/" + title + blogId,
             function (data) {
               $("#blogTitle").html("");
               $("#blogAuthor").html("");
@@ -49,10 +51,16 @@
     </script>
   </head>
   <body>
+    <h2>
+      <a href="http://localhost:4000/blogs/displayBlogs">Display Blog</a>
+      <a href="http://localhost:4000/blogs/displaySingleBlog">Display Single Blog</a>
+      <a href="http://localhost:4000/blogs/postBlog">Post Blog</a>
+  </h2>
     <h1>Single Blog</h1>
     <span>
       <label>Blog ID</label>
       <input id="blogId" type="text" />
+      <!-- <input id="title" type="text"> -->
     </span>
     <button id="getSingleBlog">Get Single Blog</button>
     <button id="deleteSingleBlog">Delete Single Blog</button>

@@ -4,28 +4,86 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script>
       $(document).ready(function () {
+        jQuery.each(["put", "delete"], function (i, method) {
+          jQuery[method] = function (url, data, callback, type) {
+            if (jQuery.isFunction(data)) {
+              type = type || callback;
+              callback = data;
+              data = undefined;
+            }
+
+            return jQuery.ajax({
+              url: url,
+              type: method,
+              dataType: type,
+              data: data,
+              success: callback,
+            });
+          };
+        });
         var title, text, author;
         $("#submit").click(function () {
           title = $("#title").val();
           text = $("#text").val();
           author = $("#author").val();
+          category = $("#category").val();
           $.post("http://localhost:4000/blogs/submit", {
             title: title,
             text: text,
             author: author,
+            category: category,
+          });
+        });
+        $("#update").click(function () {
+          title = $("#title").val();
+          text = $("#text").val();
+          author = $("#author").val();
+          category = $("#category").val();
+          id = $("#id").val();
+          console.log("id: ", id);
+          $put("http://localhost:4000/blogs/update-blog/" + id, {
+            title: title,
+            text: text,
+            author: author,
+            category: category,
           });
         });
       });
     </script>
   </head>
+
   <body>
-    <h1>Add New Blog</h1>
+    
+    <h2>
+      <a href="http://localhost:4000/blogs/displayBlogs">Display Blog</a>
+      <a href="http://localhost:4000/blogs/displaySingleBlog">Display Single Blog</a>
+      <a href="http://localhost:4000/blogs/postBlog">Post Blog</a>
+    </h2>
+
+    <h1>Update Existing Or Add New Blog</h1>
     <label>Blog Title</label>
     <input id="title" size="40" type="text" />
+    <br />
+    <br />
     <label>Blog Text</label>
-    <input id="text" size="300" type="text" />
+    <input id="text" size="40" type="text" />
+    <br />
+    <br />
     <label>Blog Author</label>
     <input id="author" size="40" type="text" />
-    <input id="submit" type="button" value="Submit" />
+    <br />
+    <br />
+    <label>Blog Category</label>
+    <input id="category" size="40" type="text" />
+    <br />
+    <br />
+    <input id="submit" type="button" value="Add" />
+    <br>
+    <br>
+    <label>Existing Blog ID</label>
+    <input id="id" size="40" type="text" />
+    <br>
+    <br>
+    <input id="update" type="button" value="Update" />
   </body>
 </html>
