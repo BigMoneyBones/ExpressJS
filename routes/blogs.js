@@ -132,7 +132,7 @@ router.put("/update-blog/:blogId", async function (req, res) {
     const blogs = await collection.find({}).toArray();
     const originalBlog = blogs[blogId];
     console.log(originalBlog);
-    const updateBlog = req.body;
+    let updateBlog = req.body;
 
     const blogTitle = updateBlog.title ? updateBlog.title : originalBlog.title;
     const blogText = updateBlog.text ? updateBlog.text : originalBlog.text;
@@ -149,11 +149,11 @@ router.put("/update-blog/:blogId", async function (req, res) {
       text: blogText,
       author: blogAuthor,
       category: blogCategory,
-      id: blogs.length + 1,
+      id: blogId + 1,
     };
     console.log(updateBlog);
     console.log(originalBlog._id);
-    await Db.blogs50.updateOne({ id: originalBlog._id }, { $set: updateBlog });
+    await collection.updateOne({ _id: originalBlog._id }, { $set: updateBlog });
     res.json("OK");
   } catch (error) {
     res.status(500).send("Error fetching posts." + error);

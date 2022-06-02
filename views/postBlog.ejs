@@ -41,7 +41,7 @@
           category = $("#category").val();
           id = $("#id").val();
           console.log("id: ", id);
-          $put("http://localhost:4000/blogs/update-blog/" + id, {
+          $.put("http://localhost:4000/blogs/update-blog/" + id, {
             title: title,
             text: text,
             author: author,
