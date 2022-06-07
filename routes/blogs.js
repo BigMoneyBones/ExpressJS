@@ -106,7 +106,7 @@ router.get("/singleBlog/:blogId", async function (req, res) {
     if (!foundBlog) {
       const noBlog = {
         title: "",
-        text: "This blog does not exist",
+        text: "This blog does not exist.",
         author: "",
         id: "",
       };
@@ -124,8 +124,15 @@ router.delete("/deleteBlog/:blogId", async function (req, res, next) {
   try {
     const blogId = Number(req.params.blogId);
     const collection = await blogsDB().collection("blogs50");
-    await collection.deleteOne({ id: blogId });
-    res.status(200).send("successfully deleted");
+    const blogToDelete = await collection.deleteOne({ id: blogId });
+    console.log(blogToDelete.deletedCount);
+
+    if(blogToDelete.deletedCount === 1) {
+      res.status(200).send('Successfully Deleted.')
+    } else {
+      res.send('This blog does not exist.').status(204)
+    }
+
   } catch (error) {
     res.status(500).send("Error deleting blog." + error);
   }

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script>
@@ -25,28 +24,36 @@
         var blogId;
         $("#getSingleBlog").click(function () {
           blogId = $("#blogId").val();
-          $.get(
-            "http://localhost:4000/blogs/singleBlog/" + blogId,
-            function (blog) {
-              $("#displayBlogId").html(blog.id);
-              $("#blogTitle").html(blog.title);
-              $("#blogAuthor").html(blog.author);
-              $("#blogText").html(blog.text);
-            }
-          );
+          if (!blogId) {
+            $("#blogText").html("Please enter a Blog Id.");
+          } else {
+            $.get(
+              "http://localhost:4000/blogs/singleBlog/" + blogId,
+              function (blog) {
+                $("#displayBlogId").html(blog.id);
+                $("#blogTitle").html(blog.title);
+                $("#blogAuthor").html(blog.author);
+                $("#blogText").html(blog.text);
+              }
+            );
+          }
         });
         $("#deleteSingleBlog").click(function () {
           blogId = $("#blogId").val();
-          console.log("delete blog " + blogId);
-          $.delete(
-            "http://localhost:4000/blogs/deleteBlog/" + blogId,
-            function (data) {
-              $("#displayBlogId").html("");
-              $("#blogTitle").html("");
-              $("#blogAuthor").html("");
-              $("#blogText").html(data);
-            }
-          );
+          // console.log("delete blog " + blogId);
+          if (!blogId) {
+            $("#blogText").html("Please enter a Blog Id to delete.");
+          } else {
+            $.delete(
+              "http://localhost:4000/blogs/deleteBlog/" + blogId,
+              function (data) {
+                $("#displayBlogId").html("");
+                $("#blogTitle").html("");
+                $("#blogAuthor").html("");
+                $("#blogText").html(data);
+              }
+            );
+          }
         });
       });
     </script>
