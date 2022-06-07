@@ -21,18 +21,41 @@
             });
           };
         });
-        var title, text, author;
+        var title, text, author, category, id;
+
+        let clearBlogDataDisplayMessage = function (data) {
+                $("#title").val("");
+                $("#text").val("");
+                $("#author").val("");
+                $("#category").val("");
+                $("#message").html(data);
+              }
         $("#submit").click(function () {
           title = $("#title").val();
           text = $("#text").val();
           author = $("#author").val();
           category = $("#category").val();
-          $.post("http://localhost:4000/blogs/submit", {
-            title: title,
-            text: text,
-            author: author,
-            category: category,
-          });
+          if (title === "" || text === "" || author === "" || category === "") {
+            let mssg = "To submit a blog please include:<br>";
+            mssg = title === "" ? mssg + "- a title<br>" : mssg;
+            mssg = text === "" ? mssg + "- blog text<br>" : mssg;
+            mssg = author === "" ? mssg + "- an author<br>" : mssg;
+            mssg = category === "" ? mssg + "- a category" : mssg;
+            $("#message").html(mssg);
+          } else {
+            $.post(
+              "http://localhost:4000/blogs/submit",
+              {
+                title: title,
+                text: text,
+                author: author,
+                category: category,
+              },
+              function (data) {
+                clearBlogDataDisplayMessage(data);
+              }
+            );
+          }
         });
         $("#update").click(function () {
           title = $("#title").val();
@@ -40,23 +63,33 @@
           author = $("#author").val();
           category = $("#category").val();
           id = $("#id").val();
-          console.log("id: ", id);
-          $.put("http://localhost:4000/blogs/update-blog/" + id, {
-            title: title,
-            text: text,
-            author: author,
-            category: category,
-          });
+          if (!id) {
+            $('#message').html('Please include a blog id to update.')
+          } else {
+            $.put(
+              "http://localhost:4000/blogs/updateBlog/" + id,
+              {
+                title: title,
+                text: text,
+                author: author,
+                category: category,
+              },
+              function (data) {
+                clearBlogDataDisplayMessage(data)
+              }
+            );
+          }
         });
       });
     </script>
   </head>
 
   <body>
-    
     <h2>
       <a href="http://localhost:4000/blogs/displayBlogs">Display Blog</a>
-      <a href="http://localhost:4000/blogs/displaySingleBlog">Display Single Blog</a>
+      <a href="http://localhost:4000/blogs/displaySingleBlog"
+        >Display Single Blog</a
+      >
       <a href="http://localhost:4000/blogs/postBlog">Post Blog</a>
     </h2>
 
@@ -78,12 +111,14 @@
     <br />
     <br />
     <input id="submit" type="button" value="Add" />
-    <br>
-    <br>
-    <label>Existing Blog ID</label>
+    <br />
+    <br />
+    <label>Existing Blog ID To Update</label>
     <input id="id" size="40" type="text" />
-    <br>
-    <br>
+    <br />
+    <br />
     <input id="update" type="button" value="Update" />
+    <br />
+    <p id="message"></p>
   </body>
 </html>

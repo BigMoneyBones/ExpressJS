@@ -3,65 +3,98 @@
   <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script>
-      $(document).ready(function () {
-        var blogs = [];
-        var sortOrder;
+      let displayBlogs = function (blogs) {
+        blogs.forEach((blog) => {
+          console.log(blog);
+          $("#blogList").append("<li>" + blog.title + "</li>");
+          $("#blogList").append("<li>" + blog.author + "</li>");
+          $("#blogList").append("<li>" + blog.text + "</li>");
+          $("#blogList").append("<li>" + blog.category + "</li>");
+          $("#blogList").append("<li>" + blog.createdAt + "</li>");
+          $("#blogList").append("<li>" + blog.lastModified + "</li>");
+          $("#blogList").append("<li>" + blog.id + "</li>");
+          // Add a space between each blogpost
+          $("#blogList").append("<p>" + "" + "</p>");
+        });
+      };
 
+      $(document).ready(function () {
+        $.get("http://localhost:4000/blogs/allAuthors", function (authors) {
+          authors.forEach((author) => {
+            console.log(author)
+            let noSpaceAuthor = author.replaceAll(" ", "-");
+            console.log(noSpaceAuthor)
+            $("#authorName").append(`<option value=${noSpaceAuthor}> ${author} </option>`);
+          });
+        });
         $("#getBlogs").click(function () {
           $("#blogList").empty();
           sortField = "?sortField=" + $("#sortField option:selected").val();
           sortOrder = "&sortOrder=" + $("#sortOrder option:selected").val();
-          console.log(sortOrder);
           $.get(
             "http://localhost:4000/blogs/all" + sortField + sortOrder,
             function (blogs) {
-              blogs.forEach((blog) => {
-                $("#blogList").append("<li>" + blog.title + "</li>");
-                $("#blogList").append("<li>" + blog.author + "</li>");
-                $("#blogList").append("<li>" + blog.text + "</li>");
-                $("#blogList").append("<li>" + blog.category + "</li>");
-                $("#blogList").append("<li>" + blog.createdAt + "</li>");
-                $("#blogList").append("<li>" + blog.lastModified + "</li>");
-                $("#blogList").append("<li>" + blog.id + "</li>");
-
-                // Add a space between each blogpost
-                $("#blogList").append("<p>" + "" + "</p>");
-              });
+              displayBlogs(blogs);
+            }
+          );
+        });
+        $("#getBlogsByAuthor").click(function () {
+          $("#blogList").empty();
+          let author = $("#authorForm option:selected").val();
+          console.log(author);
+          $.get(
+            "http://localhost:4000/blogs/blogsByAuthor/" + author,
+            function (blogs) {
+              displayBlogs(blogs);
             }
           );
         });
       });
     </script>
   </head>
+
   <body>
-    <h2>
-      <a href="http://localhost:4000/blogs/displayBlogs">Display Blog</a>
-      <a href="http://localhost:4000/blogs/displaySingleBlog">Display Single Blog</a>
-      <a href="http://localhost:4000/blogs/postBlog">Post Blog</a>
-  </h2>
     <h1>Display Blogs</h1>
-    <button id="getBlogs">Get Blogs</button>
-
+    <h2>
+      <a href="http://localhost:4000/blogs/displayBlogs">Display Blogs</a>
+      <a href="http://localhost:4000/blogs/displaySingleBlog"
+        >Display Single Blog</a
+      >
+      <a href="http://localhost:4000/blogs/postBlog">Post Blog</a>
+    </h2>
+    <label for="fieldForm">Blog Sort Field</label>
+    <form id="fieldForm" action="">
+      <select name="sortField" id="sortField">
+        <option value="" selected disabled hidden>Select an option</option>
+        <option value="id">Blog ID</option>
+        <option value="author">Author</option>
+        <option value="title">Title</option>
+        <option value="category">Category</option>
+        <option value="createdAt">Date Created</option>
+        <option value="lastModified">Date Last Modified</option>
+      </select>
+    </form>
     <label for="sortOption">Sort order:</label>
-
-    <select name="sortField" id="sortField">
-      <option value="id">Blog ID</option>
-      <option value="author">Author</option>
-      <option value="title">Title</option>
-      <option value="category">Category</option>
-      <option value="createdAt">Date Created</option>
-      <option value="lastModified">Date Last Modified</option>
-      <option value=""></option>
-    </select>
-
-    <!-- STRETCH GOAL -->
-    <select name="sortOrder" id="sortOrder">
-      <option value="asc">Ascending</option>
-      <option value="desc">Descending</option>
-    </select>
-    <!-- STRETCH GOAL -->
-
-    <ul id="blogList"></ul>
+    <form id="orderForm" action="">
+      <!-- STRETCH GOAL -->
+      <select name="sortOrder" id="sortOrder">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <!-- STRETCH GOAL -->
+    </form>
+    <br />
+    <button id="getBlogs">Get All Blogs</button>
+    <br />
+    <br />
+    <label for="authorForm">Get Blogs by Author</label>
+    <form id="authorForm">
+      <select name="authorName" id="authorName">
+        <option value="">Select An Option</option>
+      </select>
+    </form>
+    <br />
+    <button id="getBlogsByAuthor">Get Blogs by Author</button>
 
     <!-- SOLUTION 1 -->
     <!-- <a href="http://localhost:4000/blogs/all?sort=asc">Sort blogs in ascending order</a>
@@ -69,5 +102,6 @@
     <!-- SOLUTION 1 -->
 
     <ul id="blogList"></ul>
+    <br />
   </body>
 </html>
