@@ -24,12 +24,12 @@
         var title, text, author, category, id;
 
         let clearBlogDataDisplayMessage = function (data) {
-                $("#title").val("");
-                $("#text").val("");
-                $("#author").val("");
-                $("#category").val("");
-                $("#message").html(data);
-              }
+          $("#title").val("");
+          $("#text").val("");
+          $("#author").val("");
+          $("#category").val("");
+          $("#message").html(data);
+        };
         $("#submit").click(function () {
           title = $("#title").val();
           text = $("#text").val();
@@ -64,7 +64,7 @@
           category = $("#category").val();
           id = $("#id").val();
           if (!id) {
-            $('#message').html('Please include a blog id to update.')
+            $("#message").html("Please include a blog id to update.");
           } else {
             $.put(
               "http://localhost:4000/blogs/updateBlog/" + id,
@@ -75,7 +75,11 @@
                 category: category,
               },
               function (data) {
-                clearBlogDataDisplayMessage(data)
+                if (data === "does not exist.") {
+                  $("#message").html(`Blog Id: ${id} does not exist.`);
+                } else {
+                  clearBlogDataDisplayMessage(data);
+                }
               }
             );
           }

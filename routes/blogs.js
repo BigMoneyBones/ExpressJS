@@ -127,12 +127,11 @@ router.delete("/deleteBlog/:blogId", async function (req, res, next) {
     const blogToDelete = await collection.deleteOne({ id: blogId });
     console.log(blogToDelete.deletedCount);
 
-    if(blogToDelete.deletedCount === 1) {
-      res.status(200).send('Successfully Deleted.')
+    if (blogToDelete.deletedCount === 1) {
+      res.status(200).send("Successfully Deleted.");
     } else {
-      res.send('This blog does not exist.').status(204)
+      res.send("This blog does not exist.").status(204);
     }
-
   } catch (error) {
     res.status(500).send("Error deleting blog." + error);
   }
@@ -174,7 +173,7 @@ router.put("/updateBlog/:blogId", async function (req, res) {
     console.log(originalBlog);
 
     if (!originalBlog) {
-      res.send("blog Id: " + blogId + " does not exist.");
+      res.send("does not exist.").status(204);
     } else {
       let updateBlog = req.body;
       const blogTitle = updateBlog.title
